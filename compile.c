@@ -526,9 +526,9 @@ YY_LOCAL(int) yyAccept(int tp0)\n\
   return 1;\n\
 }\n\
 \n\
-YY_LOCAL(void) yyPush(char *text, int count)	{ yyval += count; }\n\
-YY_LOCAL(void) yyPop(char *text, int count)	{ yyval -= count; }\n\
-YY_LOCAL(void) yySet(char *text, int count)	{ yyval[count]= yy; }\n\
+YY_LOCAL(void) yyPush(char *text, int count)	{ (void)text; yyval += count; }\n\
+YY_LOCAL(void) yyPop(char *text, int count)	{ (void)text; yyval -= count; }\n\
+YY_LOCAL(void) yySet(char *text, int count)	{ (void)text; yyval[count]= yy; }\n\
 \n\
 #endif /* YY_PART */\n\
 \n\
@@ -671,6 +671,7 @@ void Rule_compile_c(Node *node)
   for (n= actions;  n;  n= n->action.list)
     {
       fprintf(output, "YY_ACTION(void) yy%s(char *yytext, int yyleng)\n{\n", n->action.name);
+      fprintf(output, "  (void)yytext; (void)yyleng;\n");
       defineVariables(n->action.rule->rule.variables);
       fprintf(output, "  yyprintf((stderr, \"do yy%s\\n\"));\n", n->action.name);
       fprintf(output, "  %s;\n", n->action.text);
